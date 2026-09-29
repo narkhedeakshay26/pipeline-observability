@@ -1,0 +1,61 @@
+// Grafana Alloy: ships systemd-journal logs of selected services to Loki.
+//
+// All values come from environment variables written by scripts/install-agent.sh
+// into /etc/default/alloy (Debian/Ubuntu) or /etc/sysconfig/alloy (RHEL family):
+//
+//   LOKI_URL     http://<monitoring-server>:3100/loki/api/v1/push   (required)
+//   HOST_LABEL   name from inventory/hosts.txt (must match the Prometheus `host` label)
+//   HOST_ROLE    role from inventory/hosts.txt
+//   UNIT_REGEX   which systemd units to ship, e.g. myapp-.+
+//   DROP_REGEX   lines to throw away on the host, before they cost bandwidth/storage
+
+// Turn journald's internal fields into Loki labels.
+loki.relabel "journal" {
+  forward_to = []
+
+  rule {
+    source_labels = ["__journal__systemd_unit"]
+    target_label  = "unit"
+  }
+
+  rule {
+    source_labels = ["__journal_priority_keyword"]
+    target_label  = "level"
+  }
+}
+
+loki.source.journal "services" {
+  max_age       = "12h"
+  relabel_rules = loki.relabel.journal.rules
+  labels        = {
+    job  = "systemd-journal",
+    host = coalesce(sys.env("HOST_LABEL"), constants.hostname),
+    role = coalesce(sys.env("HOST_ROLE"), "default"),
+  }
+  forward_to = [loki.process.filter.receiver]
+}
+
+loki.process "filter" {
+  // 1) Keep only the services we care about (everything else in the journal is dropped).
+  stage.match {
+    selector            = "{job=\"systemd-journal\", unit!~\"" + coalesce(sys.env("UNIT_REGEX"), "myapp-.+") + "\"}"
+    action              = "drop"
+    drop_counter_reason = "unit_not_selected"
+  }
+
+  // 2) Drop noisy or sensitive lines at the source.
+  //    Per-message chatter and full payload dumps are the usual culprits:
+  //    they cost the most storage and may contain personal data.
+  stage.drop {
+    expression          = coalesce(sys.env("DROP_REGEX"), ".*(DEBUG|TRACE).*")
+    drop_counter_reason = "noisy_or_sensitive"
+  }
+
+  forward_to = [loki.write.default.receiver]
+}
+
+loki.write "default" {
+  endpoint {
+    url = sys.env("LOKI_URL")
+  }
+}

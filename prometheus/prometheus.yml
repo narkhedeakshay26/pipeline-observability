@@ -1,0 +1,25 @@
+global:
+  scrape_interval: 15s
+  evaluation_interval: 15s
+
+rule_files:
+  - /etc/prometheus/rules/*.yml
+
+scrape_configs:
+  # Prometheus itself
+  - job_name: prometheus
+    static_configs:
+      - targets: ["localhost:9090"]
+
+  # Loki's own metrics (ingestion rate, errors)
+  - job_name: loki
+    static_configs:
+      - targets: ["loki:3100"]
+
+  # Your hosts. Targets are generated from inventory/hosts.txt by
+  # scripts/render-targets.sh. Prometheus re-reads the file every minute,
+  # so adding a host needs no restart.
+  - job_name: node
+    file_sd_configs:
+      - files: ["/etc/prometheus/targets/*.yml"]
+        refresh_interval: 1m

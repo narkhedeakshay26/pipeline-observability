@@ -1,0 +1,24 @@
+[Unit]
+Description=Prometheus node_exporter (host metrics)
+Wants=network-online.target
+After=network-online.target
+
+[Service]
+Type=simple
+User=node_exporter
+Group=node_exporter
+# __UNIT_REGEX__ is replaced by scripts/install-agent.sh.
+# The systemd collector exposes node_systemd_unit_state for matching units,
+# which powers the dashboard's Service Finder and Active/Inactive counts.
+ExecStart=/usr/local/bin/node_exporter \
+  --web.listen-address=:9100 \
+  --collector.systemd \
+  --collector.systemd.unit-include=__UNIT_REGEX__
+Restart=on-failure
+RestartSec=5
+NoNewPrivileges=true
+ProtectHome=true
+ProtectSystem=full
+
+[Install]
+WantedBy=multi-user.target

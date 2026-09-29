@@ -1,0 +1,11 @@
+[Unit]
+Description=Demo pipeline worker %i
+After=network-online.target
+
+[Service]
+ExecStart=/usr/local/bin/myapp-demo.sh %i
+Restart=always
+DynamicUser=yes
+
+[Install]
+WantedBy=multi-user.target

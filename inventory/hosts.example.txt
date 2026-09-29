@@ -1,0 +1,18 @@
+# ---------------------------------------------------------------------------
+# Inventory: one monitored host per line.   ← THIS IS WHERE YOUR IPs GO
+#
+#   <name>      <ip>           <role>
+#
+# name : short label shown in Grafana (letters, digits, dash). Also used as the
+#        `host` label on logs, so metrics and logs line up.
+# ip   : address Prometheus scrapes (node_exporter :9100) and SSH connects to.
+# role : free-form group used by the dashboard's Role filter (ingest, worker, db…).
+#
+# Copy this file to inventory/hosts.txt and edit it. hosts.txt is git-ignored
+# so your real IPs never end up in a public repo.
+# The 192.0.2.0/24 range below is reserved for documentation (RFC 5737).
+# ---------------------------------------------------------------------------
+app-01      192.0.2.11     ingest
+app-02      192.0.2.12     ingest
+app-03      192.0.2.13     worker
+app-04      192.0.2.14     worker

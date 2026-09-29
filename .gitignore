@@ -1,0 +1,9 @@
+# Real environment values: never commit
+.env
+inventory/hosts.txt
+prometheus/targets/*.yml
+
+# Local scratch
+*.bak
+*.swp
+.DS_Store
