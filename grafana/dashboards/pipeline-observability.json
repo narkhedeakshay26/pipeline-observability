@@ -14,7 +14,7 @@
     "to": "now"
   },
   "schemaVersion": 39,
-  "version": 1,
+  "version": 2,
   "editable": true,
   "graphTooltip": 1,
   "templating": {
@@ -743,7 +743,7 @@
         "x": 0,
         "y": 27,
         "w": 24,
-        "h": 10
+        "h": 12
       }
     },
     {
@@ -753,7 +753,7 @@
       "collapsed": false,
       "gridPos": {
         "x": 0,
-        "y": 37,
+        "y": 39,
         "w": 24,
         "h": 1
       },
@@ -811,10 +811,11 @@
       "id": 13,
       "gridPos": {
         "x": 0,
-        "y": 38,
+        "y": 40,
         "w": 12,
         "h": 8
-      }
+      },
+      "interval": "1m"
     },
     {
       "type": "timeseries",
@@ -868,10 +869,11 @@
       "id": 14,
       "gridPos": {
         "x": 12,
-        "y": 38,
+        "y": 40,
         "w": 12,
         "h": 8
-      }
+      },
+      "interval": "1m"
     },
     {
       "type": "timeseries",
@@ -925,10 +927,11 @@
       "id": 15,
       "gridPos": {
         "x": 0,
-        "y": 46,
+        "y": 48,
         "w": 24,
         "h": 8
-      }
+      },
+      "interval": "1m"
     },
     {
       "type": "logs",
@@ -958,7 +961,7 @@
       "id": 16,
       "gridPos": {
         "x": 0,
-        "y": 54,
+        "y": 56,
         "w": 24,
         "h": 12
       }

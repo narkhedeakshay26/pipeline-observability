@@ -286,6 +286,10 @@ sum by (host, unit) (
 Change the `|= "..."` filter to your summary line, and the regex to capture its count.
 If your service prints JSON, use `| json | unwrap your_field` instead.
 
+The log panels have a **minimum interval of 1m** (panel → Query options). If your
+service writes its summary line less often than once a minute, raise it to at least
+that gap. Otherwise most intervals contain no summary line and the graph looks empty.
+
 **Retention.** Metrics: `PROMETHEUS_RETENTION` in `.env`. Logs:
 `limits_config.retention_period` in `loki/loki-config.yml`. Then run `docker compose up -d`.
 

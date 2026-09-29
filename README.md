@@ -8,6 +8,8 @@ you three views:
 - **Are my services running?** Every watched systemd unit, active or inactive, with a search box.
 - **What are they saying?** Filtered logs, error counts, and throughput numbers pulled out of log lines.
 
+![Dashboard](docs/img/dashboard.png)
+
 ```
    Monitored hosts (any number)                      Monitoring server (Docker Compose)
  ┌──────────────────────────────┐                ┌──────────────────────────────────────┐
@@ -90,9 +92,12 @@ hardening, is in **[docs/GUIDE.md](docs/GUIDE.md)**.
 
 Tested with Prometheus v3.15.0, Loki 3.7.8, Grafana 13.2.3, Alloy v1.20.1 and node_exporter v1.12.1.
 
-## Screenshots
+## Screenshot
 
-_Add yours to `docs/img/` once it's running, e.g. `![Dashboard](docs/img/dashboard.png)`._
+![Pipeline Observability dashboard](docs/img/dashboard.png)
+
+_Three demo hosts running the bundled `myapp-demo@N` workers, with `myapp-demo@3` on
+`app-03` stopped so the Inactive services and Service finder panels show it._
 
 ## License
 
